@@ -1,0 +1,43 @@
+// On fait appel à la dépendance Mysql2
+const mysql = require('mysql2');
+
+// On instancie une connection à la DB 092021_app-express-lc
+const db = mysql.createConnection({
+    host:'localhost',
+    user: 'user',
+    password: 'password',
+    database: 'dbname'
+});
+
+// On test la connection à la DB
+db.connect((err) => {
+    // Si nous avons une erreur
+    if(err) throw err;
+    // Sinon on affiche un message
+    console.log('Connecté');
+    // On crée notre table users
+    let sql = "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255))";
+    db.query(sql, (err, result) => {
+        // Si nous avons une erreur
+        if(err) throw err;
+        // Sinon on affiche un message
+        console.log('Table crée');
+    });
+    // On vide notre table users
+    sql = "TRUNCATE TABLE users";
+    db.query(sql, (err, result) => {
+        // Si nous avons une erreur
+        if(err) throw err;
+        // Sinon on affiche un message
+        console.log('Table vidé');
+    });
+    sql = "INSERT INTO users VALUES (null, 'Fabrice'), (null, 'Oualid'), (null, 'Laura'), (null, 'Raf'), (null, 'Gael')";
+    db.query(sql, function (err, result) {
+        // Si nous avons une erreur
+      if (err) throw err;
+      // Sinon on affiche un message
+      console.log("Insertion effectué");
+    });
+});
+
+module.exports = { db };
